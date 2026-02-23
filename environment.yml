@@ -1,0 +1,10 @@
+name: shortcut-learning
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.10
+  - pytorch
+  - pip
+  - pip:
+      - -r requirements.txt
