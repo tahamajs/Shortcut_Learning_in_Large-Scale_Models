@@ -1,0 +1,30 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 0.2519738148152828,
+    "accuracy": 1.0,
+    "worst_group_accuracy": 1.0,
+    "sfs": 0.0,
+    "ics": 1.0,
+    "eqs": 0.5,
+    "cfs": 0.6999999999999998,
+    "group_accuracy": {
+      "triggered": 1.0,
+      "clean": 1.0
+    }
+  },
+  {
+    "epoch": 2,
+    "train_loss": 0.014562618359923363,
+    "accuracy": 1.0,
+    "worst_group_accuracy": 1.0,
+    "sfs": 0.0,
+    "ics": 1.0,
+    "eqs": 0.5,
+    "cfs": 0.6999999999999998,
+    "group_accuracy": {
+      "triggered": 1.0,
+      "clean": 1.0
+    }
+  }
+]
