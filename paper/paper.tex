@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, booktabs, graphicx, hyperref, enumitem, longtable}
+\title{A Reproducible Pipeline for Shortcut Learning Evaluation and Mitigation in Large Language Models}
+\author{Shortcut Learning Project Team}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a fully implemented, reproducible pipeline for diagnosing and mitigating shortcut learning in language models. The system covers dataset preprocessing, training under multiple optimization regimes, shortcut stress testing, robust evaluation metrics, mitigation modules, and experiment reporting. In addition to standard accuracy and worst-group accuracy, we implement semantic and explanation-aware indicators including Semantic Fidelity Score (SFS), Internal Consistency Score (ICS), Explanation Quality Score (EQS), and a confidence proxy (CFS). The pipeline is modular and designed for extension to new tasks and shortcuts.
+\end{abstract}
+
+\section{Introduction}
+Shortcut learning is the tendency of models to rely on spurious correlations instead of robust causal signals. This can inflate in-distribution scores while causing brittle out-of-distribution behavior. Our objective is to provide a practical end-to-end framework for:\begin{enumerate}[leftmargin=*]
+    \item generating and loading benchmark and shortcut-augmented datasets,
+    \item training models under controlled optimizer/batch-size settings,
+    \item quantifying shortcut sensitivity using standard and explanation-aware metrics,
+    \item applying mitigation methods and comparing outcomes.
+\end{enumerate}
+
+\section{Pipeline Design}
+The implemented repository follows a staged architecture:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Data preprocessing}: synthetic HANS/NLI-like, SST-2 trigger, and MCQA data generators with augmentation hooks.
+    \item \textbf{Data loading}: PyTorch \texttt{Dataset} classes with metadata-aware collators.
+    \item \textbf{Training}: HuggingFace model loading, Adam/SGD optimizers, optional gradient accumulation, and small-batch \(\beta_2\) scaling.
+    \item \textbf{Evaluation}: accuracy, worst-group accuracy, SFS, ICS, EQS, CFS.
+    \item \textbf{Stress tests}: MCQA option permutation and SST-2 trigger mutation checks.
+    \item \textbf{Mitigation}: counterfactual text augmentation and GroupDRO-style group-robust objective.
+\end{enumerate}
+
+\section{Implemented Metrics}
+\subsection{Accuracy and Worst-Group Accuracy}
+Let \(\hat{y}_i\) and \(y_i\) be prediction and label. Accuracy is
+\[
+\text{Acc} = \frac{1}{N}\sum_{i=1}^{N}\mathbb{1}[\hat{y}_i = y_i].
+\]
+For groups \(g\in\mathcal{G}\), group accuracy is computed per group and worst-group accuracy is
+\[
+\text{WGA} = \min_{g\in\mathcal{G}}\text{Acc}_g.
+\]
+
+\subsection{Semantic Fidelity Score (SFS)}
+We compute cosine similarity between normalized bag-of-words embeddings of prompt and model output as a lightweight semantic proxy:
+\[
+\text{SFS}(p,o)=\cos(\phi(p),\phi(o)).
+\]
+
+\subsection{Internal Consistency Score (ICS)}
+ICS is defined as a contradiction-sensitive binary score over explanation steps. The provided implementation flags direct negation conflicts and returns 0 upon contradiction, else 1.
+
+\subsection{Explanation Quality Score (EQS)}
+\[
+\text{EQS}=0.5\cdot\text{SFS}+0.5\cdot\text{ICS}.
+\]
+
+\subsection{Confidence Score (CFS)}
+CFS is parsed from model confidence-formatted output and normalized to \([0,1]\).
+
+\section{Training with Optimizer Scaling}
+For Adam under small batches, we scale \(\beta_2\) by token half-life:
+\[
+\beta_2 = \exp\left(\frac{\log(0.5)}{H/B}\right),
+\]
+where \(H\) is desired half-life in tokens and \(B\) is batch size.
+
+\section{Mitigation Modules}
+\subsection{Counterfactual Augmentation}
+We provide text replacement mapping to create counterfactual samples and re-balance spurious features.
+
+\subsection{GroupDRO-style Objective}
+Given per-example losses grouped by metadata, we compute group mean losses and a softmax-reweighted robust loss.
+
+\section{Experiment Protocol}
+Recommended ablation grid:
+\begin{itemize}[leftmargin=*]
+    \item models: DistilBERT, GPT-2 family, LLaMA-family
+    \item batch size: \{1, 8, 32, 128\}
+    \item optimizers: Adam (scaled \(\beta_2\)), SGD
+    \item prompts: zero-shot, few-shot, CoT
+    \item datasets: NLI/HANS, SST-2 trigger, MCQA permutation
+\end{itemize}
+
+\section{CLI and Reproducibility}
+All core stages are executable via Python CLI scripts: preprocessing, training, evaluation, and shortcut tests. Reproducibility support includes seeded randomness, deterministic PyTorch settings, and environment pinning (\texttt{requirements.txt}, \texttt{environment.yml}, \texttt{Dockerfile}).
+
+\section{Limitations}
+The default repository uses lightweight synthetic preprocessing for immediate reproducibility and CI friendliness; users should replace with full benchmark loaders for production experiments. SFS/ICS are intentionally lightweight defaults and can be swapped with embedding/NLI model-based implementations.
+
+\section{Conclusion}
+This work delivers an implementation-ready baseline for shortcut-learning research in LLMs. The modular structure simplifies adding new datasets, metrics, and mitigation strategies while preserving reproducibility and experiment traceability.
+
+\appendix
+\section{Commands}
+\begin{verbatim}
+python scripts/preprocess.py --dataset hans --augment negation --output_dir data/hans
+python scripts/train.py --model distilbert-base-uncased --dataset_dir data/hans --output_dir models/hans
+python scripts/evaluate.py --model_dir models/hans --dataset_path data/hans/val.jsonl
+python scripts/test_shortcuts.py --dataset_path data/mcqa/val.jsonl --tests permute_mcqa
+\end{verbatim}
+
+\end{document}
