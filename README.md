@@ -46,14 +46,14 @@ pip install -r requirements.txt
 
 ### 1) Preprocess
 ```bash
-python scripts/preprocess.py --dataset hans --augment negation --output_dir data/hans
-python scripts/preprocess.py --dataset sst2 --augment trigger --output_dir data/sst2
-python scripts/preprocess.py --dataset mcqa --output_dir data/mcqa
+python3 scripts/preprocess.py --dataset hans --augment negation --output_dir data/hans
+python3 scripts/preprocess.py --dataset sst2 --augment trigger --output_dir data/sst2
+python3 scripts/preprocess.py --dataset mcqa --output_dir data/mcqa
 ```
 
 ### 2) Train
 ```bash
-python scripts/train.py \
+python3 scripts/train.py \
   --model distilbert-base-uncased \
   --dataset_dir data/sst2 \
   --task classification \
