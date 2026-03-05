@@ -5,5 +5,11 @@ numpy
 pandas
 scikit-learn
 mlflow
-wandb
 pytest
+regex
+huggingface_hub
+safetensors
+tokenizers
+scipy
+joblib
+threadpoolctl
