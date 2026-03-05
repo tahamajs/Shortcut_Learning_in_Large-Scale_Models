@@ -28,13 +28,13 @@
 }
 \lstset{style=mystyle}
 \title{A Comprehensive Mathematical Framework for Shortcut Learning Evaluation and Mitigation in Large Language Models}
-\author{Shortcut Learning Project Team \\(Iranian AI Research Lab)}
+\author{Shortcut Learning Project Team \\ (Iranian AI Research Lab)}
 \date{2026-03-06}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This paper presents a comprehensive mathematical framework for evaluating and mitigating shortcut learning in large language models (LLMs). We provide rigorous derivations, detailed explanations, and implementation guidelines for all key metrics and techniques used in our reproducible pipeline. The framework includes novel mathematical formulations for Semantic Fidelity Score (SFS), Internal Consistency Score (ICS), Explanation Quality Score (EQS), and Confidence Score (CFS), along with a theoretical foundation for small-batch training with Adam optimizer scaling. We derive the GroupDRO-style objective and provide a complete mathematical treatment of worst-group accuracy. Through extensive case studies and experimental validation, we demonstrate how these metrics reveal the "right for wrong reasons" phenomenon in LLMs and how small-batch training with proper hyperparameter scaling improves robustness to spurious correlations. This work provides the mathematical foundation for rigorous shortcut learning evaluation in LLMs.
+This paper presents a comprehensive mathematical framework for evaluating and mitigating shortcut learning in large language models (LLMs). We provide rigorous derivations, detailed explanations, and implementation guidelines for all key metrics and techniques used in our reproducible pipeline. The framework includes novel mathematical formulations for Semantic Fidelity Score (SFS), Internal Consistency Score (ICS), Explanation Quality Score (EQS), and Confidence Score (CFS), along with a theoretical foundation for small-batch training with Adam optimizer scaling. We derive the GroupDRO-style objective and provide a complete mathematical treatment of worst-group accuracy. Through extensive case studies and experimental validation, we demonstrate how these metrics reveal the "right for wrong reasons" phenomenon in LLMs and how small-batch training with proper hyperparameter scaling improves robustness to spurious correlations. This work provides the mathematical foundation for rigorous shortcut learning evaluation in LLMs, addressing critical gaps in current research.
 \end{abstract}
 
 \section{Introduction}
@@ -436,7 +436,7 @@ LLaMA-2 7B & 91.3$\pm$0.7 & 52.4$\pm$3.1 & 38.9$\pm$3.1 & 49.2 & 0.51 \\
 \end{table}
 
 \subsubsection{Analysis}
-The results demonstrate the reverse scaling effect: larger models show greater accuracy drops on shortcut tests. The EQS values decrease with model size, indicating that larger models generate lower-quality explanations on shortcut examples.
+The results demonstrate the reverse scaling effect: larger models show greater accuracy drops on shortcut tests. The EQS values decrease with model size, indicating that larger models generate lower-quality explanations on shortcut examples. This confirms Tang et al.'s (2023) finding that larger LLMs are more prone to shortcut learning.
 
 \subsection{Case Study 2: MCQA Permutation Benchmark}
 \label{subsec:mcqa_case}
@@ -460,7 +460,7 @@ LLaMA-2 7B & 84.7$\pm$0.6 & 50.8$\pm$2.7 & 33.9$\pm$2.7 & 54.2 & 0.58 \\
 \end{table}
 
 \subsubsection{Analysis}
-The results confirm Zong et al.'s (2023) findings that LLMs are sensitive to answer order. The accuracy drop increases with model size, and the EQS decreases, indicating that larger models generate less coherent explanations on permuted examples.
+The results confirm Zong et al.'s (2023) findings that LLMs are sensitive to answer order. The accuracy drop increases with model size, and the EQS decreases, indicating that larger models generate less coherent explanations on permuted examples. This demonstrates the "reverse scaling" phenomenon in MCQA tasks.
 
 \subsection{Case Study 3: Small-Batch Training}
 \label{subsec:small_batch_case}
@@ -485,7 +485,7 @@ Batch Size & WGA & EQS \\
 \end{table}
 
 \subsubsection{Analysis}
-Small-batch training (especially $B=1$) significantly improves WGA and EQS, demonstrating the benefits of gradient noise for avoiding shortcut minima. The results validate Marek et al.'s (2025) finding that small-batch training with proper $\beta_2$ scaling improves robustness.
+Small-batch training (especially $B=1$) significantly improves WGA and EQS, demonstrating the benefits of gradient noise for avoiding shortcut minima. The results validate Marek et al.'s (2025) finding that small-batch training with proper $\beta_2$ scaling improves robustness. The improvement in EQS indicates that small-batch training also leads to more coherent explanations.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -512,8 +512,6 @@ Future work includes:
 \end{itemize}
 
 This work provides the mathematical foundation for rigorous shortcut learning evaluation in LLMs, enabling researchers and practitioners to build more robust and reliable language models.
-
-
 \bibliographystyle{plain}
 \bibliography{references}
 
