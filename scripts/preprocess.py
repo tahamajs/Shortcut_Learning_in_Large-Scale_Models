@@ -19,12 +19,12 @@ def build_synthetic_nli(n: int = 200, augment: str | None = None):
     rows = []
     for i in range(n):
         entail = i % 2 == 0
-        premise = f"Entity {i} is a cat." if entail else f"Entity {i} is a cat."
-        hypothesis = (
-            f"Entity {i} is an animal."
-            if entail
-            else f"Entity {i} is a vehicle."
-        )
+        if entail:
+            premise = f"Entity {i} is a cat."
+            hypothesis = f"Entity {i} is an animal."
+        else:
+            premise = f"Entity {i} is a vehicle."
+            hypothesis = f"Entity {i} is a cat."
         if augment == "negation":
             hypothesis += " This statement is not false."
         group = "lexical_overlap" if i % 3 == 0 else "non_overlap"
