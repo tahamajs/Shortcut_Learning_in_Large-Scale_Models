@@ -15,7 +15,7 @@ from pathlib import Path
 from scripts.utils import ensure_dir, set_seed, write_jsonl
 
 
-def build_synthetic_nli(n: int = 200, augment: str | None = None):
+def build_synthetic_nli(n: int = 2000, augment: str | None = None):
     rows = []
     for i in range(n):
         entail = i % 2 == 0
@@ -38,7 +38,7 @@ def build_synthetic_nli(n: int = 200, augment: str | None = None):
     return rows
 
 
-def build_synthetic_sst2(n: int = 200, trigger: str | None = None):
+def build_synthetic_sst2(n: int = 2000, trigger: str | None = None):
     rows = []
     pos_tokens = ["great", "excellent", "love", "fun"]
     neg_tokens = ["awful", "bad", "hate", "boring"]
@@ -53,7 +53,7 @@ def build_synthetic_sst2(n: int = 200, trigger: str | None = None):
     return rows
 
 
-def build_synthetic_mcqa(n: int = 100):
+def build_synthetic_mcqa(n: int = 1000):
     rows = []
     for i in range(n):
         a, b = i + 1, i + 2

@@ -5,33 +5,33 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-mkdir -p results/logs data models
+# mkdir -p results/logs data models
 
-echo "===== (Optional) venv setup ====="
-if [[ ! -d ".venv" ]]; then
-  python3 -m venv .venv
-fi
+# echo "===== (Optional) venv setup ====="
+# if [[ ! -d ".venv" ]]; then
+#   python3 -m venv .venv
+# fi
 
 # shellcheck disable=SC1091
-source .venv/bin/activate
-detect_num_labels () {
-  local train_jsonl="$1"
-  python3 - <<'PY' "$train_jsonl"
-import json, sys
-path = sys.argv[1]
-mx = -1
-with open(path, "r", encoding="utf-8") as f:
-  for line in f:
-    line=line.strip()
-    if not line: 
-      continue
-    obj=json.loads(line)
-    mx=max(mx, int(obj["label"]))
-print(mx+1)
-PY
-}
-python -m pip install --upgrade pip wheel setuptools
-pip install -r requirements.txt
+# source .venv/bin/activate
+# detect_num_labels () {
+#   local train_jsonl="$1"
+#   python3 - <<'PY' "$train_jsonl"
+# import json, sys
+# path = sys.argv[1]
+# mx = -1
+# with open(path, "r", encoding="utf-8") as f:
+#   for line in f:
+#     line=line.strip()
+#     if not line: 
+#       continue
+#     obj=json.loads(line)
+#     mx=max(mx, int(obj["label"]))
+# print(mx+1)
+# PY
+# }
+# python -m pip install --upgrade pip wheel setuptools
+# pip install -r requirements.txt
 
 echo "===== 1) Preprocess datasets ====="
 # Adjust these to match what your preprocess.py supports.
