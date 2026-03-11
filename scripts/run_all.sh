@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-# mkdir -p results/logs data models
+mkdir -p results/logs data models
 
 # echo "===== (Optional) venv setup ====="
 # if [[ ! -d ".venv" ]]; then
@@ -70,12 +70,7 @@ python3 scripts/train.py \
   --output_dir models/sst2-distilbert-acc4 \
   | tee results/logs/train_sst2_distilbert_acc4.log
 
-# HANS / NLI-like (many repos implement this as classification in preprocess output)
-# If your hans preprocessing outputs 3-way labels, set --num_labels 3.
-# If it outputs 2-way labels, set --num_labels 2.
-# If your train.py automatically infers labels, you can remove --num_labels.
-NL_HANS="$(detect_num_labels data/hans/train.jsonl)"
-echo "Detected HANS num_labels=$NL_HANS"
+# HANS / NLI-like (classification, 2-way labels)
 
 python3 scripts/train.py \
   --model distilbert-base-uncased \
