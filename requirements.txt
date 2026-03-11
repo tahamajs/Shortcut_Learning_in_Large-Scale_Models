@@ -13,3 +13,6 @@ tokenizers
 scipy
 joblib
 threadpoolctl
+matplotlib
+seaborn
+tqdm
