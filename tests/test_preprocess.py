@@ -109,4 +109,4 @@ def test_collate_with_metadata_batches():
         batch = collate_with_metadata([ds[j] for j in range(4)])
         assert batch["input_ids"].shape[0] == 4
         assert batch["labels"].shape[0] == 4
-        assert len(batch["groups"]) == 4
+        assert len(batch["group"]) == 4
